@@ -132,4 +132,50 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/progress_container_height"
+        android:background="@color/twenty_percent_black_overlay">
+
+        <TextView
+            android:id="@+id/player_speed_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical|left|end"
+            android:paddingLeft="8dp"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/ate_primary_text_dark"
+            android:textSize="12sp"
+            android:text="SPD"
+            tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry"
+            tools:text="SPD" />
+
+        <TextView
+            android:id="@+id/player_speed_value"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical|right|end"
+            android:paddingRight="8dp"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@color/ate_primary_text_dark"
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded,RtlSymmetry"
+            tools:text="100%" />
+
+        <SeekBar
+            android:id="@+id/player_speed_slider"
+            style="@style/MusicProgressSlider"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/player_speed_value"
+            android:layout_toRightOf="@id/player_speed_label"
+            tools:ignore="RtlHardcoded,UnusedAttribute" />
+
+    </RelativeLayout>
+
 </LinearLayout>

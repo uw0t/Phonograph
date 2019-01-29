@@ -77,6 +77,10 @@ public class MusicPlayerRemote {
         }
     }
 
+    public static void setPlayBackSpeed(float speedFactor) {
+        musicService.setPlayBackSpeed(speedFactor);
+    }
+
     public static final class ServiceBinder implements ServiceConnection {
         private final ServiceConnection mCallback;
 

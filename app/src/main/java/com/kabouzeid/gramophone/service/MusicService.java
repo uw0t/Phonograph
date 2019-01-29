@@ -373,6 +373,10 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         return musicBind;
     }
 
+    public void setPlayBackSpeed(float speedFactor) {
+        playback.setPlayBackSpeed(speedFactor);
+    }
+
     private static final class QueueSaveHandler extends Handler {
         @NonNull
         private final WeakReference<MusicService> mService;

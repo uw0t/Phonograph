@@ -37,6 +37,8 @@ public interface Playback {
 
     int getAudioSessionId();
 
+    void setPlayBackSpeed(float speedFactor);
+
     interface PlaybackCallbacks {
         void onTrackWentToNext();
 

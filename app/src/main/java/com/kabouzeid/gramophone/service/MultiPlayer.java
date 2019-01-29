@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.PowerManager;
@@ -30,6 +31,8 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
     private Playback.PlaybackCallbacks callbacks;
 
     private boolean mIsInitialized = false;
+
+    private float speedFactor = 1.0f;
 
     /**
      * Constructor of <code>MultiPlayer</code>
@@ -86,6 +89,7 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
         intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, context.getPackageName());
         intent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC);
         context.sendBroadcast(intent);
+        setUpPlaybackParams(speedFactor);
         return true;
     }
 
@@ -294,6 +298,23 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
     @Override
     public int getAudioSessionId() {
         return mCurrentMediaPlayer.getAudioSessionId();
+    }
+
+    @Override
+    public void setPlayBackSpeed(float speedFactor) {
+        this.speedFactor = speedFactor;
+        if (mIsInitialized) {
+            setUpPlaybackParams(speedFactor);
+        }
+    }
+
+    private void setUpPlaybackParams(float speedFactor) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            PlaybackParams params = new PlaybackParams();
+            params.setSpeed(speedFactor);
+            params.setPitch(speedFactor);
+            mCurrentMediaPlayer.setPlaybackParams(params);
+        }
     }
 
     /**

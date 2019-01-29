@@ -1,5 +1,6 @@
 package com.kabouzeid.gramophone.ui.fragments.player.card;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -54,6 +55,11 @@ public class CardPlayerPlaybackControlsFragment extends AbsMusicServiceFragment 
     TextView songTotalTime;
     @BindView(R.id.player_song_current_progress)
     TextView songCurrentProgress;
+
+    @BindView(R.id.player_speed_slider)
+    SeekBar speedSlider;
+    @BindView(R.id.player_speed_value)
+    TextView speedValue;
 
     private PlayPauseDrawable playerFabPlayPauseDrawable;
 
@@ -167,6 +173,7 @@ public class CardPlayerPlaybackControlsFragment extends AbsMusicServiceFragment 
         setUpRepeatButton();
         setUpShuffleButton();
         setUpProgressSlider();
+        setUpSpeedSlider();
     }
 
     private void setUpPrevNext() {
@@ -261,5 +268,31 @@ public class CardPlayerPlaybackControlsFragment extends AbsMusicServiceFragment 
         progressSlider.setProgress(progress);
         songTotalTime.setText(MusicUtil.getReadableDurationString(total));
         songCurrentProgress.setText(MusicUtil.getReadableDurationString(progress));
+    }
+
+    private void setUpSpeedSlider() {
+        int color = MaterialValueHelper.getPrimaryTextColor(getContext(), false);
+        speedSlider.getThumb().mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+        speedSlider.getProgressDrawable().mutate().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
+        speedSlider.setMax(20);
+
+        speedSlider.setProgress(10);
+        onUpdateSpeedValue(10);
+
+        speedSlider.setOnSeekBarChangeListener(new SimpleOnSeekbarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    float speedFactor = 0.5f + 0.05f * progress;
+                    MusicPlayerRemote.setPlayBackSpeed(speedFactor);
+                    onUpdateSpeedValue(progress);
+                }
+            }
+        });
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void onUpdateSpeedValue(int progress) {
+        speedValue.setText((50 + 5 * progress) + "%");
     }
 }
