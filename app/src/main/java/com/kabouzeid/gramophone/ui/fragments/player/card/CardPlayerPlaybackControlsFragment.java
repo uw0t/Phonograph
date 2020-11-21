@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,9 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kabouzeid.appthemehelper.util.ColorUtil;
 import com.kabouzeid.appthemehelper.util.MaterialValueHelper;
 import com.kabouzeid.appthemehelper.util.TintHelper;
@@ -276,15 +277,14 @@ public class CardPlayerPlaybackControlsFragment extends AbsMusicServiceFragment 
         speedSlider.getProgressDrawable().mutate().setColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
         speedSlider.setMax(20);
 
-        speedSlider.setProgress(10);
-        onUpdateSpeedValue(10);
+        speedSlider.setProgress(MusicPlayerRemote.getPlaybackSpeed());
+        onUpdateSpeedValue(MusicPlayerRemote.getPlaybackSpeed());
 
         speedSlider.setOnSeekBarChangeListener(new SimpleOnSeekbarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
-                    float speedFactor = 0.5f + 0.05f * progress;
-                    MusicPlayerRemote.setPlayBackSpeed(speedFactor);
+                    MusicPlayerRemote.setPlaybackSpeed(progress);
                     onUpdateSpeedValue(progress);
                 }
             }

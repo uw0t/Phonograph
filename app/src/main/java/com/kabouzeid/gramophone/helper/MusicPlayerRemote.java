@@ -15,10 +15,11 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.kabouzeid.gramophone.R;
 import com.kabouzeid.gramophone.loader.SongLoader;
@@ -43,6 +44,8 @@ public class MusicPlayerRemote {
     public static MusicService musicService;
 
     private static final WeakHashMap<Context, ServiceBinder> mConnectionMap = new WeakHashMap<>();
+
+    private static int playbackSpeed = 10;
 
     public static ServiceToken bindToService(@NonNull final Context context,
                                              final ServiceConnection callback) {
@@ -78,8 +81,13 @@ public class MusicPlayerRemote {
         }
     }
 
-    public static void setPlayBackSpeed(float speedFactor) {
-        musicService.setPlayBackSpeed(speedFactor);
+    public static void setPlaybackSpeed(int speed) {
+        playbackSpeed = speed;
+        musicService.setPlaybackSpeed(0.5f + 0.05f * speed);
+    }
+
+    public static int getPlaybackSpeed() {
+        return playbackSpeed;
     }
 
     public static final class ServiceBinder implements ServiceConnection {

@@ -175,6 +175,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
     private Handler uiThreadHandler;
 
+    private int playbackSpeed = 10;
+
     private static String getTrackUri(@NonNull Song song) {
         return MusicUtil.getSongFileUri(song.id).toString();
     }
@@ -383,8 +385,8 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
         return musicBind;
     }
 
-    public void setPlayBackSpeed(float speedFactor) {
-        playback.setPlayBackSpeed(speedFactor);
+    public void setPlaybackSpeed(float speedFactor) {
+        playback.setPlaybackSpeed(speedFactor);
     }
 
     private static final class QueueSaveHandler extends Handler {
