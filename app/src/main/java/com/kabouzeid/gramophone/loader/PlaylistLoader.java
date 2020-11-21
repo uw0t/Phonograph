@@ -5,22 +5,23 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.PlaylistsColumns;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.kabouzeid.gramophone.model.Playlist;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlaylistLoader {
 
     @NonNull
-    public static ArrayList<Playlist> getAllPlaylists(@NonNull final Context context) {
+    public static List<Playlist> getAllPlaylists(@NonNull final Context context) {
         return getAllPlaylists(makePlaylistCursor(context, null, null));
     }
 
     @NonNull
-    public static Playlist getPlaylist(@NonNull final Context context, final int playlistId) {
+    public static Playlist getPlaylist(@NonNull final Context context, final long playlistId) {
         return getPlaylist(makePlaylistCursor(
                 context,
                 BaseColumns._ID + "=?",
@@ -54,8 +55,8 @@ public class PlaylistLoader {
     }
 
     @NonNull
-    public static ArrayList<Playlist> getAllPlaylists(@Nullable final Cursor cursor) {
-        ArrayList<Playlist> playlists = new ArrayList<>();
+    public static List<Playlist> getAllPlaylists(@Nullable final Cursor cursor) {
+        List<Playlist> playlists = new ArrayList<>();
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -69,7 +70,7 @@ public class PlaylistLoader {
 
     @NonNull
     private static Playlist getPlaylistFromCursorImpl(@NonNull final Cursor cursor) {
-        final int id = cursor.getInt(0);
+        final long id = cursor.getLong(0);
         final String name = cursor.getString(1);
         return new Playlist(id, name);
     }

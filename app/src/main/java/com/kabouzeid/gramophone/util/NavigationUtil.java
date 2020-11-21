@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.media.audiofx.AudioEffect;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import android.widget.Toast;
 
 import com.kabouzeid.gramophone.R;
@@ -24,7 +24,7 @@ import com.kabouzeid.gramophone.ui.activities.PlaylistDetailActivity;
  */
 public class NavigationUtil {
 
-    public static void goToArtist(@NonNull final Activity activity, final int artistId, @Nullable Pair... sharedElements) {
+    public static void goToArtist(@NonNull final Activity activity, final long artistId, @Nullable Pair... sharedElements) {
         final Intent intent = new Intent(activity, ArtistDetailActivity.class);
         intent.putExtra(ArtistDetailActivity.EXTRA_ARTIST_ID, artistId);
 
@@ -36,7 +36,7 @@ public class NavigationUtil {
         }
     }
 
-    public static void goToAlbum(@NonNull final Activity activity, final int albumId, @Nullable Pair... sharedElements) {
+    public static void goToAlbum(@NonNull final Activity activity, final long albumId, @Nullable Pair... sharedElements) {
         final Intent intent = new Intent(activity, AlbumDetailActivity.class);
         intent.putExtra(AlbumDetailActivity.EXTRA_ALBUM_ID, albumId);
 

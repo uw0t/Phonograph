@@ -10,10 +10,10 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.FileProvider;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -28,7 +28,6 @@ import com.kabouzeid.gramophone.model.Genre;
 import com.kabouzeid.gramophone.model.Playlist;
 import com.kabouzeid.gramophone.model.Song;
 import com.kabouzeid.gramophone.model.lyrics.AbsSynchronizedLyrics;
-import com.kabouzeid.gramophone.util.MusicUtil;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.tag.FieldKey;
@@ -45,13 +44,13 @@ import java.util.regex.Pattern;
  */
 public class MusicUtil {
 
-    public static Uri getMediaStoreAlbumCoverUri(int albumId) {
+    public static Uri getMediaStoreAlbumCoverUri(long albumId) {
         final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
 
         return ContentUris.withAppendedId(sArtworkUri, albumId);
     }
 
-    public static Uri getSongFileUri(int songId) {
+    public static Uri getSongFileUri(long songId) {
         return ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
     }
 
@@ -71,39 +70,7 @@ public class MusicUtil {
         }
     }
 
-    public static void setRingtone(@NonNull final Context context, final int id) {
-        final ContentResolver resolver = context.getContentResolver();
-        final Uri uri = getSongFileUri(id);
-        try {
-            final ContentValues values = new ContentValues(2);
-            values.put(MediaStore.Audio.AudioColumns.IS_RINGTONE, "1");
-            values.put(MediaStore.Audio.AudioColumns.IS_ALARM, "1");
-            resolver.update(uri, values, null, null);
-        } catch (@NonNull final UnsupportedOperationException ignored) {
-            return;
-        }
 
-        try {
-            Cursor cursor = resolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    new String[]{MediaStore.MediaColumns.TITLE},
-                    BaseColumns._ID + "=?",
-                    new String[]{String.valueOf(id)},
-                    null);
-            try {
-                if (cursor != null && cursor.getCount() == 1) {
-                    cursor.moveToFirst();
-                    Settings.System.putString(resolver, Settings.System.RINGTONE, uri.toString());
-                    final String message = context.getString(R.string.x_has_been_set_as_ringtone, cursor.getString(0));
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-        } catch (SecurityException ignored) {
-        }
-    }
 
     @NonNull
     public static String getArtistInfoString(@NonNull final Context context, @NonNull final Artist artist) {
@@ -193,20 +160,20 @@ public class MusicUtil {
      * to a music library item.
      * Ex: for a given album --> buildInfoString(album.artist, album.songCount)
      */
-    public static String buildInfoString(@NonNull final String string1, @NonNull final String string2)
+    @NonNull
+    public static String buildInfoString(@Nullable final String string1, @Nullable final String string2)
     {
         // Skip empty strings
-        if (string1.isEmpty()) {return string2;}
-        if (string2.isEmpty()) {return string1;}
+        if (TextUtils.isEmpty(string1)) {
+            //noinspection ConstantConditions
+            return TextUtils.isEmpty(string2) ? "" : string2;
+        }
+        if (TextUtils.isEmpty(string2)) {
+            //noinspection ConstantConditions
+            return TextUtils.isEmpty(string1) ? "" : string1;
+        }
 
-        final String separator = "  •  ";
-
-        final StringBuilder builder = new StringBuilder();
-        builder.append(string1);
-        builder.append(separator);
-        builder.append(string2);
-
-        return builder.toString();
+        return string1 + "  •  " + string2;
     }
 
     //iTunes uses for example 1002 for track 2 CD1 or 3011 for track 11 CD3.
@@ -215,7 +182,7 @@ public class MusicUtil {
         return trackNumberToFix % 1000;
     }
 
-    public static void insertAlbumArt(@NonNull Context context, int albumId, String path) {
+    public static void insertAlbumArt(@NonNull Context context, long albumId, String path) {
         ContentResolver contentResolver = context.getContentResolver();
 
         Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
@@ -226,12 +193,14 @@ public class MusicUtil {
         values.put("_data", path);
 
         contentResolver.insert(artworkUri, values);
+        contentResolver.notifyChange(artworkUri, null);
     }
 
-    public static void deleteAlbumArt(@NonNull Context context, int albumId) {
+    public static void deleteAlbumArt(@NonNull Context context, long albumId) {
         ContentResolver contentResolver = context.getContentResolver();
         Uri localUri = Uri.parse("content://media/external/audio/albumart");
         contentResolver.delete(ContentUris.withAppendedId(localUri, albumId), null, null);
+        contentResolver.notifyChange(localUri, null);
     }
 
     @NonNull
@@ -268,6 +237,8 @@ public class MusicUtil {
         }
         selection.append(")");
 
+        int deletedCount = 0;
+
         try {
             final Cursor cursor = context.getContentResolver().query(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection.toString(),
@@ -277,27 +248,30 @@ public class MusicUtil {
                 // as from the album art cache
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    final int id = cursor.getInt(0);
+                    final long id = cursor.getLong(0);
                     final Song song = SongLoader.getSong(context, id);
                     MusicPlayerRemote.removeFromQueue(song);
                     cursor.moveToNext();
                 }
 
-                // Step 2: Remove selected tracks from the database
-                context.getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        selection.toString(), null);
 
-                // Step 3: Remove files from card
+                // Step 2: Remove files from card
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
+                    final long id = cursor.getLong(0);
                     final String name = cursor.getString(1);
                     try { // File.delete can throw a security exception
                         final File f = new File(name);
-                        if (!f.delete()) {
+                        if (f.delete()) {
+                            // Step 3: Remove selected track from the database
+                            context.getContentResolver().delete(ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id),null, null);
+                            deletedCount++;
+                        } else {
                             // I'm not sure if we'd ever get here (deletion would
                             // have to fail, but no exception thrown)
                             Log.e("MusicUtils", "Failed to delete file " + name);
                         }
+
                         cursor.moveToNext();
                     } catch (@NonNull final SecurityException ex) {
                         cursor.moveToNext();
@@ -307,8 +281,7 @@ public class MusicUtil {
                 }
                 cursor.close();
             }
-            context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
-            Toast.makeText(context, context.getString(R.string.deleted_x_songs, songs.size()), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, context.getString(R.string.deleted_x_songs, deletedCount), Toast.LENGTH_SHORT).show();
         } catch (SecurityException ignored) {
         }
     }
@@ -326,7 +299,7 @@ public class MusicUtil {
     }
 
     public static boolean isFavorite(@NonNull final Context context, @NonNull final Song song) {
-        return PlaylistsUtil.doPlaylistContains(context, getFavoritesPlaylist(context).id, song.id);
+        return PlaylistsUtil.doesPlaylistContain(context, getFavoritesPlaylist(context).id, song.id);
     }
 
     public static void toggleFavorite(@NonNull final Context context, @NonNull final Song song) {
@@ -377,7 +350,7 @@ public class MusicUtil {
                 String filename = Pattern.quote(FileUtil.stripExtension(file.getName()));
                 String songtitle = Pattern.quote(song.title);
 
-                final ArrayList<Pattern> patterns = new ArrayList<>();
+                final List<Pattern> patterns = new ArrayList<>();
                 patterns.add(Pattern.compile(String.format(format, filename), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE));
                 patterns.add(Pattern.compile(String.format(format, songtitle), Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE));
 

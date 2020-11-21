@@ -87,7 +87,9 @@
     <string name="delete_playlists_title">Izbriši popise naslova</string>
     <string name="clear_playlist_title">Očisti popis naslova</string>
     <string name="save_playlist_title">Spremi kao datoteku</string>
+    <string name="save_playlists_title">Spremi kao datoteke</string>
     <string name="add_playlist_title">"Dodaj na popis naslova"</string>
+    <string name="select_all_title">Odaberi sve</string>
     <string name="action_shuffle_all">Izmiješaj sve</string>
     <string name="action_shuffle_album">Izmiješaj album</string>
     <string name="action_shuffle_artist">Izmiješaj izvođača</string>
@@ -104,6 +106,7 @@
     <string name="never">Nikad</string>
     <string name="today">Danas</string>
     <string name="this_week">Ovaj tjedan</string>
+    <string name="past_seven_days">Prošlih 7 dana</string>
     <string name="this_month">Ovaj mjesec</string>
     <string name="past_three_months">Prošla 3 mjeseca</string>
     <string name="this_year">Ova godina</string>
@@ -130,6 +133,7 @@
     <string name="pref_title_last_added_interval">Interval nedavnog popisa</string>
     <string name="pref_title_synchronized_lyrics_show">Prikaži sinkronizirane stihove</string>
     <string name="pref_title_remember_last_tab">Zapamti zadnju karticu</string>
+    <string name="pref_title_remember_shuffle">Zapamti nasumičnu rep.</string>
     <string name="no_equalizer">Ekvalizator nije pronađen.</string>
     <string name="no_audio_ID">"Reproducirajte nešto i pokušajte opet."</string>
     <string name="delete_action">Izbriši</string>
@@ -164,11 +168,12 @@
     <string name="pref_summary_audio_ducking">Obavijesti, navigacija itd.</string>
     <string name="pref_summary_synchronized_lyrics_show">Trenutno su samo sinkronizirani stihovi u LRC formatu podržani. Ili ugrađeni ili u zasebnoj datoteci.</string>
     <string name="pref_summary_remember_last_tab">Pri pokretanju otvori zadnje otvorenu karticu</string>
+    <string name="pref_summary_remember_shuffle">Način nasumične rep. će ostati uključen prilikom biranja novog popisa pjesama</string>
     <string name="could_not_download_album_cover">"Nije mogu\u0107e preuzeti odgovaraju\u0107i omot albuma."</string>
     <string name="search_hint">Pretražite svoju biblioteku...</string>
     <string name="favorites">Favoriti</string>
     <string name="last_added">Posljednje dodano</string>
-    <string name="history">Povijest</string>
+    <string name="history">Nedavno reproducirano</string>
     <string name="my_top_tracks">Najslušanije</string>
     <string name="remove_cover">Ukloni omot</string>
     <string name="download_from_last_fm">Skini s lokacije Last.fm</string>
@@ -221,6 +226,8 @@
     <string name="folders">Mape</string>
     <string name="saved_playlist_to">Popis naslova spremljen u %s.</string>
     <string name="failed_to_save_playlist">Popis naslova nije spremljen (%s).</string>
+    <string name="saved_x_playlists_to_x">%1$d popisa naslova je spremljeno u %2$s.</string>
+    <string name="saved_x_playlists_to_x_failed_to_save_x">%1$d popisa naslova je spremljeno u %2$s, %3$d nije uspješno spremljeno.</string>
     <string name="not_listed_in_media_store"><![CDATA[<b>%s</b> nije na popisu media storea.]]></string>
     <string name="some_files_are_not_listed_in_the_media_store">Neke datoteke nisu u medijskom spremniku.</string>
     <string name="nothing_to_scan">Nema ništa za skeniranje.</string>
@@ -273,12 +280,12 @@
     <string name="eugene_cheung_summary">Za njegov doprinos izvornom kodu.</string>
     <string name="adrian_summary">Za stvaranje dizajna stranice albuma.</string>
     <string name="add_action">Dodaj</string>
-    <string name="blacklist">Crna lista</string>
-    <string name="remove_from_blacklist">Ukloni sa crne liste</string>
-    <string name="do_you_want_to_remove_from_the_blacklist"><![CDATA[Želite li ukloniti<b>%1$s</b> sa crne liste?]]></string>
-    <string name="clear_blacklist">Očisti crnu listu</string>
-    <string name="do_you_want_to_clear_the_blacklist">Želite li očistiti crnu listu?</string>
-    <string name="pref_summary_blacklist">Sadržaj mapa na crnoj listi je skriven iz vaše biblioteke.</string>
+    <string name="blacklist">Crni popis</string>
+    <string name="remove_from_blacklist">Ukloni sa crnog popisa</string>
+    <string name="do_you_want_to_remove_from_the_blacklist"><![CDATA[Želite li ukloniti<b>%1$s</b> sa crnog popisa?]]></string>
+    <string name="clear_blacklist">Očisti crni popis</string>
+    <string name="do_you_want_to_clear_the_blacklist">Želite li očistiti crni popis?</string>
+    <string name="pref_summary_blacklist">Sadržaj mapa crnog popisa je skriven iz vaše biblioteke.</string>
     <string name="reset_artist_image">Resetiraj slike izvođača</string>
     <string name="set_artist_image">Postavi sliku izvođača</string>
     <string name="library_categories">Kategorije biblioteke</string>
@@ -292,4 +299,5 @@
     <string name="sort_order_artist">Izvođač</string>
     <string name="sort_order_album">Album</string>
     <string name="sort_order_year">Godina</string>
+    <string name="finish_current_music_sleep_timer">Završi zadnju pjesmu</string>
 </resources>

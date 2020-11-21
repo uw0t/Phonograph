@@ -4,13 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.Menu;
@@ -54,6 +54,7 @@ import com.kabouzeid.gramophone.util.PhonographColorUtil;
 import com.kabouzeid.gramophone.util.PreferenceUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -291,7 +292,7 @@ public class AlbumDetailActivity extends AbsSlidingMusicPanelActivity implements
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        final ArrayList<Song> songs = adapter.getDataSet();
+        final List<Song> songs = adapter.getDataSet();
         switch (id) {
             case R.id.action_sleep_timer:
                 new SleepTimerDialog().show(getSupportFragmentManager(), "SET_SLEEP_TIMER");
@@ -429,7 +430,7 @@ public class AlbumDetailActivity extends AbsSlidingMusicPanelActivity implements
 
     @Override
     public Loader<Album> onCreateLoader(int id, Bundle args) {
-        return new AsyncAlbumLoader(this, args.getInt(EXTRA_ALBUM_ID));
+        return new AsyncAlbumLoader(this, args.getLong(EXTRA_ALBUM_ID));
     }
 
     @Override
@@ -444,9 +445,9 @@ public class AlbumDetailActivity extends AbsSlidingMusicPanelActivity implements
     }
 
     private static class AsyncAlbumLoader extends WrappedAsyncTaskLoader<Album> {
-        private final int albumId;
+        private final long albumId;
 
-        public AsyncAlbumLoader(Context context, int albumId) {
+        public AsyncAlbumLoader(Context context, long albumId) {
             super(context);
             this.albumId = albumId;
         }
