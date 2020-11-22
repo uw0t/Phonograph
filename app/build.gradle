@@ -34,13 +34,13 @@ static def getProperty(@Nullable Properties properties, String name) {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion '29.0.3'
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 29
+        minSdkVersion 23
+        targetSdkVersion 30
 
-        renderscriptTargetApi 29
+        renderscriptTargetApi 30
         vectorDrawables.useSupportLibrary = true
 
         applicationId 'com.kabouzeid.gramophone'

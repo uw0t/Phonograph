@@ -310,12 +310,10 @@ public class MultiPlayer implements Playback, MediaPlayer.OnErrorListener, Media
     }
 
     private void setUpPlaybackParams(float speedFactor) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            PlaybackParams params = new PlaybackParams();
-            params.setSpeed(speedFactor);
-            params.setPitch(speedFactor);
-            mCurrentMediaPlayer.setPlaybackParams(params);
-        }
+        PlaybackParams params = new PlaybackParams();
+        params.setSpeed(speedFactor);
+        params.setPitch(speedFactor);
+        mCurrentMediaPlayer.setPlaybackParams(params);
     }
 
     /**
