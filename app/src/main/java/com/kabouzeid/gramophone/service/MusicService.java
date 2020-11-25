@@ -227,8 +227,6 @@ public class MusicService extends Service implements SharedPreferences.OnSharedP
 
         PreferenceUtil.getInstance(this).registerOnSharedPreferenceChangedListener(this);
 
-        restoreState();
-
         mediaSession.setActive(true);
 
         sendBroadcast(new Intent("com.kabouzeid.gramophone.PHONOGRAPH_MUSIC_SERVICE_CREATED"));
