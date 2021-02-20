@@ -43,7 +43,7 @@ android {
 
         applicationId 'com.kabouzeid.gramophone'
         versionCode 179
-        versionName '1.3.5 Custom'
+        versionName '1.3.5.0'
     }
     signingConfigs {
         release {
